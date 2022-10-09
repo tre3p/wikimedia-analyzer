@@ -1,0 +1,13 @@
+server:
+  port: 5657
+
+opensearch:
+  url: http://localhost:9200
+  index: wikimedia
+
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      group-id: opensearch_consumer
+    topic: wikimedia.recent.changes
