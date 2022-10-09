@@ -24,6 +24,9 @@ public class KafkaProducerConfig {
         producerProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         producerProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producerProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        producerProperties.put(ProducerConfig.LINGER_MS_CONFIG, "20");
+        producerProperties.put(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toString(32 * 1024));
+        producerProperties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "snappy");
 
         return producerProperties;
     }
