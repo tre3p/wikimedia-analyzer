@@ -1,3 +1,8 @@
 spring:
   kafka:
     bootstrap-servers: 127.0.0.1:9092
+
+wikimedia:
+  topic:
+    name: wikimedia.recent.changes
+  url: https://stream.wikimedia.org/v2/stream/recentchange
