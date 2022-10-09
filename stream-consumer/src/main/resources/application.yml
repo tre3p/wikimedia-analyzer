@@ -1,0 +1,15 @@
+server:
+  port: 5658
+
+spring:
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092
+    consumer:
+      group-id: wikimedia_consumer
+    topic: wikimedia.recent.changes
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
