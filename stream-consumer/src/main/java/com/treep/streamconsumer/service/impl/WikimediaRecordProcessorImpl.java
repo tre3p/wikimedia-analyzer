@@ -3,48 +3,56 @@ package com.treep.streamconsumer.service.impl;
 import com.treep.streamconsumer.dto.WikimediaContent;
 import com.treep.streamconsumer.metrics.MetricsHolder;
 import com.treep.streamconsumer.service.WikimediaRecordProcessor;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-
+@Slf4j
 @Service
+@RequiredArgsConstructor
 public class WikimediaRecordProcessorImpl implements WikimediaRecordProcessor {
 
-    private JSONParser jsonParser;
-    private MetricsHolder metricsHolder;
-
-    public WikimediaRecordProcessorImpl(JSONParser jsonParser, MetricsHolder metricsHolder) {
-        this.jsonParser = jsonParser;
-        this.metricsHolder = metricsHolder;
-    }
+    private final JSONParser jsonParser;
+    private final MetricsHolder metricsHolder;
 
     @Override
-    public WikimediaContent parse(String json) throws ParseException {
+    public void analyze(String content) {
+        log.debug("+analyze()");
+        WikimediaContent wikimediaContent;
+        try {
+            wikimediaContent = parse(content);
+        } catch (ParseException e) {
+            log.error("analyze(): error while parsing content from Kafka.");
+            throw new RuntimeException(e);
+        }
+
+        String domain = wikimediaContent.getDomain();
+
+        if (domain.contains("wikipedia")) {
+            if (wikimediaContent.isBot()) {
+                metricsHolder.botCounter.increment();
+            }
+            processDomainCountry(domain.split("\\."));
+        }
+        log.debug("-analyze()");
+    }
+
+    private WikimediaContent parse(String json) throws ParseException {
+        log.debug("+parse()");
         JSONObject jsonObject = (JSONObject) jsonParser.parse(json);
 
         boolean isBot = (boolean) jsonObject.get("bot");
         String domain = (String) jsonObject.get("server_name");
 
+        log.debug("-parse()");
         return new WikimediaContent(domain, isBot);
     }
 
-    @Override
-    public void analyze(WikimediaContent content) {
-        if (content.isBot()) {
-            metricsHolder.botCounter.increment();
-        }
-
-        String domain = content.getDomain();
-
-        if (domain.contains("wikipedia")) {
-            processDomainCountry(domain.split("\\."));
-        }
-    }
-
     private void processDomainCountry(String[] domainParts) {
+        log.debug("+processDomainCountry()");
         if (domainParts.length == 3) {
             metricsHolder.allWikisCounter.increment();
             switch (domainParts[0]) {
@@ -53,5 +61,6 @@ public class WikimediaRecordProcessorImpl implements WikimediaRecordProcessor {
                 case "fr" -> metricsHolder.frWikipediaCounter.increment();
             }
         }
+        log.debug("-processDomainCountry()");
     }
 }

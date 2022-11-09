@@ -32,9 +32,9 @@ public class WikimediaChangeHandler implements EventHandler {
 
     @Override
     public void onMessage(String s, MessageEvent messageEvent) {
-        log.info("+onMessage(): received new message from stream. Sending to Kafka..");
+        log.debug("+onMessage(): received new message from stream. Sending to Kafka..");
         wikimediaKafkaProducer.send(topicName, messageEvent.getData());
-        log.info("-onMessage(): message successfully sent!");
+        log.debug("-onMessage(): message successfully sent!");
     }
 
     @Override

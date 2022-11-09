@@ -23,9 +23,9 @@ public class StreamProducerApplication {
 
     @PostConstruct
     private void runEventSource() {
-        log.info("+runEventSource(): starting event source..");
+        log.debug("+runEventSource(): starting event source..");
         eventSource.start();
-        log.info("-runEventSource(): event source started!");
+        log.debug("-runEventSource(): event source started!");
     }
 
 }
