@@ -9,6 +9,7 @@ The main idea of this project was to learn how to work with Grafana, Prometheus 
 ## How this works:
 
 There are two modules: a producer and a consumer. Producer reads the data from the stream, and then transfers the data to Kafka. After that, consumer sequentially reads this data, performs some analysis, and then sends the metrics to Prometheus, and from there the data goes to Grafana. That's how I did it, but if you want to play with this project, feel free to make your own implementation. You can do a fork, and I will definitely look at your implementation. With the code you have now in the application, you can build some graphs:
+
 ![alt text](https://i.imgur.com/HTirPCa.png)
 
 ## How to launch:
