@@ -1,6 +1,6 @@
 # Wikimedia Analyzer
 
-![alt text](https://i.imgur.com/Zui6bcN.png)
+![alt text](https://i.imgur.com/oU8lisK.png)
 
 ## Idea
 
